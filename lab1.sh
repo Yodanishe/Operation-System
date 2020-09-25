@@ -1,38 +1,50 @@
 #!/bin/bash
 
-# if [ -n !"$1" ]
-# then
-# 	echo "Параметр отсутсвует , используйте команду --help|-h"
-# 	exit 1
-# fi
-read word
+echo "Введите команду, для справки используйте --help | -h"
 
-case $word in
+while [[ true ]]; do
+	read word
+	case $word in
 
 		--help | -h )
 				echo "Авторы: Дак Михаил, Лозовой Владислав, Степанов Владислав"
 				echo "Все доступные аргументы: "
-				echo -e "\n--help\t-h\tИнформация\n"
+				echo -e "\nИнформация\n"
 				echo "Примеры запуска: "
 				echo "--help | -h"
-				echo -e "\n--output\t-o\tВывод всех сетевых интерфейсов\n"
+				echo -e "\nВывод всех сетевых интерфейсов\n"
 				echo "Примеры запуска: "
 				echo "--output | -o"
-				echo -e "\n--up\t-u\tВключение заданных интерфейсов\n"
+				echo -e "\nВключение заданных интерфейсов\n"
 				echo "Примеры запуска: "
 				echo "--up | -u"
-				echo -e "\n--down\t-d\tОтключение заданных интерфейсов заданных интерфейсов\n"
+				echo "lo"
+				echo -e "\nОтключение заданных интерфейсов заданных интерфейсов\n"
 				echo "Примеры запуска: "
 				echo "--down | -d"
-				echo -e "\n--ip\t-i\tУстановка IP\n"
+				echo "lo"
+				echo -e "\nУстановка IP\n"
 				echo "Примеры запуска: "
-				echo "--ip | -i"
-				echo -e "\n--mask\t-m\tУстановка Mask\n"
+				echo "--ip | -i "
+				echo "lo 	127.0.0.1"
+				echo -e "\nУстановка Mask\n"
 				echo "Примеры запуска: "
 				echo "--mask | -m"
-				echo -e "\n--gateway\t-g\tУстановка Gateway\n"
+				echo "lo 	255.0.0.0"
+				echo -e "\nУстановка Gateway\n"
 				echo "Примеры запуска: "
 				echo "--gateway | -g"
+				echo "192.168.0.1 	lo"
+				echo -e "\nСтатистика использования трафика\n"
+				echo "Примеры запуска: "
+				echo "--stat | -s"
+				echo -e "\nКарта сети\n"
+				echo "Примеры запуска: "
+				echo "--nmap | -n"
+				echo "localhost"
+				echo -e "\nВыход\n"
+				echo "Примеры запуска: "
+				echo "--quit| -q"
 			;;
 		--output | -o)
 				echo "Вывод всех сетевых интерфейсов: "
@@ -40,8 +52,9 @@ case $word in
 			;;
 		--up | -u) 
 				echo "Включение заданных интерфейсов "
-				echo "Введите нужный интерфейс: "
-				while [[ ${interface} -ne 0 ]]; do
+				echo "Введите нужный интерфейс(для выхода ввиде q): "
+				while [[ $interface != "q" ]]; 
+				do	
 					read interface
 					sudo ip link set ${interface} up
 					ip link ls up
@@ -49,19 +62,49 @@ case $word in
 			;;
 		--down | -d) 
 				echo "Отключение заданных интерфейсов "
-				echo "Введите нужный интерфейс: "
-				read interface
+				echo "Введите нужный интерфейс(для выхода ввиде q): "
+				while [[ ${interface} != "q" ]]; do
+					read interface
 					sudo ip link set ${interface} down
 					ip link ls up
+				done
 			;;
 		--ip | -i)
 				echo "Установка IP"
 				echo "Введите IP-адрес и интерфейс которые нужно установить"
-				read ip_address
+				ip link ls
 				read interface
+				read ip_address
 				sudo ip a add ${ip_address} dev ${interface}
+			;;
+		--mask | -m)
+				echo "Установка Mask"
+				echo "Введите "
+				read interface
+				read mask
+				sudo ifconfig ${interface} netmask ${mask}
+			;;
+		--gateway | -g)
+				echo "Установка Gateway"
+				echo "Введите адрес шлюза и интерфейс, которые нужно установить"
+				read interface
+				read gate_address
+				sudo route add default gw ${gate_address} ${interface}
+			;;
+		--stat | -s) 
+				echo "Статистика использования трафика"
+				cat /proc/net/dev
+			;;
+		--nmap | -n)
+				echo "Карта сети"
+				echo "Введите сеть"
+				read target
+				nmap -A ${target}
+			;;
+		--quit | -q) 
+				echo "Выход"
+				exit;
+	esac	
+done
 
-
-
-esac
 # Егор Алексеевич
