@@ -4,10 +4,10 @@ FLAG := -std=c11
 
 .PHONY: all clean install uninstall rebuild
 
-all: proc
+all: Program
 
-proc: builds/main.o builds/commands.o
-	$(CC) builds/main.o builds/commands.o -o proc
+Program: builds/main.o builds/commands.o
+	$(CC) builds/main.o builds/commands.o -o Program
 
 builds/main.o: main.cpp
 	$(CC) -c main.cpp -o builds/main.o
@@ -17,12 +17,12 @@ builds/commands.o: commands.cpp
 
 clean:
 	find -name "*.o" -exec rm -rf {} +
-	rm -rf ./bin/proc
+	rm -rf ./bin/Program
 
 install:
-	sudo cp ./bin/proc /usr/bin/proc
+	sudo cp ./bin/proc /usr/bin/Program
 
 uninstall:
-	sudo rm -f /usr/bin/proc
+	sudo rm -f /usr/bin/Program
 
 rebuild: clean all
