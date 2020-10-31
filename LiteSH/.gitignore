@@ -1,0 +1,5 @@
+CMakeLists.txt
+*.o
+Program
+cmake-build-debug
+.idea

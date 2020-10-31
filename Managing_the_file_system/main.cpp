@@ -11,17 +11,17 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    if (!strcmp(argv[1], "--help") || !strcmp(argv[1],"-h")) {
+    if (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) {
         cout << "Авторы: Дак Михаил, Лозовой Владислав, Степанов Владислав" << endl
-        << "Программа предназначена для работы с файловой системой" << endl
-        << "--help || -h Вывод информации о программе и её функциях" << endl
-        << "--MV || -m ./fileName.txt ./builds/fileName.txt - Перемещение файла в нужную директорию" << endl
-        << "--CP || -c ./fileName.txt ./builds/fileName.txt - Копирование файла в нужную директорию" << endl
-        << "--delete || -d ./fileName.txt - Удалить файл из текущей директории" << endl
-        << "--SizeFile || -sf ./fileName.txt - Размер файла" << endl
-        << "--SizeDir || -sd ./directoryName/ - Размер директории" << endl
-        << "--procfs - Отображение всех процессов из файловой системы procfs" << endl
-        ;
+             << "Программа предназначена для работы с файловой системой" << endl
+             << "--help || -h Вывод информации о программе и её функциях" << endl
+             << "--MV ./fileName.txt ./builds/fileName.txt - Перемещение файла в нужную директорию" << endl
+             << "--CP ./fileName.txt ./builds/fileName.txt - Копирование файла в нужную директорию" << endl
+             << "--ls ./directoryName - Отображение всех файлов в директории" << endl
+             << "--RM ./fileName.txt - Удалить файл из текущей директории" << endl
+             << "--SizeFile ./fileName.txt - Размер файла" << endl
+             << "--SizeDir ./directoryName/ - Размер директории" << endl
+             << "--procfs - Отображение всех процессов из файловой системы procfs" << endl;
     } else if (!strcmp(argv[1], "--MV")) {
         if (argc < 4) {
             cout << stderr << "Недостаточно аргументов" << endl;
@@ -37,9 +37,9 @@ int main(int argc, char **argv) {
 
         CP(argv[2], argv[3]);
     } else if (!strcmp(argv[1], "--RM")) {
-            if (argc < 3) {
-                cout << stderr << "Недостаточно аргументов" << endl;
-            }
+        if (argc < 3) {
+            cout << stderr << "Недостаточно аргументов" << endl;
+        }
 
         RM(argv[2]);
     } else if (!strcmp(argv[1], "--SizeFile")) {
