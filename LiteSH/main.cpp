@@ -1,15 +1,21 @@
 #include <iostream>
 #include <cstring>
+#include <unistd.h>
 #include "LiteSH.hpp"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-
     if (argc < 2) {
         cout << "Недостаточно аргументов для информации введите --help|-h\n";
         return 0;
     }
+
+
+    if (RecvSignal(SIGINT) == 1) {
+        cout << "Ошибка получения сигнала" << endl;
+    }
+    sleep(60);
 
     if (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h")) {
         cout << "Авторы: Дак Михаил, Лозовой Владислав, Степанов Владислав" << endl
@@ -58,21 +64,7 @@ int main(int argc, char **argv) {
         if (SendSignal(pid, signum) == 1) {
             cout << "Ошибка отправки сигнала" << endl;
         }
-    } else if (!strcmp(argv[1], "RecvSignal")) {
-        int signum;
-        cout << "Введите сигнал для Получения: ";
-        cin >> signum;
-        if (RecvSignal(signum) == 1) {
-            cout << "Ошибка получения сигнала" << endl;
-        }
-         pid_t pid;
-         cout << "Введите pid: ";
-         cin >> pid;
-         cout << "Введите сигнал для отправки: ";
-         cin >> signum;
-         if (SendSignal(pid, signum) == 1) {
-             cout << "Ошибка отправки сигнала" << endl;
-         }
     }
+
     return 0;
 }
