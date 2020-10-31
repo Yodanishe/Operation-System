@@ -20,7 +20,7 @@ using namespace std;
 int CreateProcess(char *nameProc);
 int CreateDaemon(char *ProcName);
 
-void sighandler();
+void sigHandler(int signum);
 int SendSignal(pid_t pid, int signum);
 int RecvSignal(int signum);
 

@@ -65,7 +65,14 @@ int main(int argc, char **argv) {
         if (RecvSignal(signum) == 1) {
             cout << "Ошибка получения сигнала" << endl;
         }
-
+         pid_t pid;
+         cout << "Введите pid: ";
+         cin >> pid;
+         cout << "Введите сигнал для отправки: ";
+         cin >> signum;
+         if (SendSignal(pid, signum) == 1) {
+             cout << "Ошибка отправки сигнала" << endl;
+         }
     }
     return 0;
 }

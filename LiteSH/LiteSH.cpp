@@ -42,8 +42,8 @@ int CreateDaemon(char *ProcName) {
     return 0;
 }
 
-void sighandler(int sign) {
-    cout << "Signal received successfully" << endl;
+void sigHandler(int signo) {
+    cout << "\tЗахват произошёл успешно" << endl;
 }
 
 
@@ -55,7 +55,7 @@ int SendSignal(pid_t pid, int signum) {
 }
 
 int RecvSignal(int signum) {
-    if (signal(signum, sighandler) == SIG_ERR) {
+    if (signal(signum, sigHandler) == SIG_ERR) {
         return 1;
     }
     return 0;
