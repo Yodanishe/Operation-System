@@ -1,5 +1,6 @@
 CMakeLists.txt
 *.o
-Program
+LiteSH
+client
 cmake-build-debug
 .idea

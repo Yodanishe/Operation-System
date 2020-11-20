@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 //    char *error;
-//    pid_t server_pid = net_proc();
+
 //    void *handle = dlopen("/home/misha/Labs/Operation-System/LiteSH/libs/libinfo.so", RTLD_LAZY);
 //    if (!handle) {
 //        fputs (dlerror(), stderr);
@@ -24,43 +24,47 @@ int main(int argc, char **argv) {
 //    }
 //    sleep(60);
 
-    int selection = 0;
-    char *command = new char[100];
-    cout << "Write command to server: " << endl;
-    cin >> command;
+    struct sockaddr_in server, client;
+    int sock = socket(AF_INET, SOCK_STREAM, 0); // создание сокета
+    int enable = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+        perror("setsockopt(SO_REUSEADDR) failed");
+// структура для сервера
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY; // 0.0.0.0
+    server.sin_port = htons(2019); // порт сервера
 
-//    selection = NetWorkClient(command);
-//    cout << endl;
+    bind(sock, (struct sockaddr *) &server, sizeof(server)); // связка с сокетом
+    listen(sock, 5); // размер очереди
 
-    if (selection == 1) {
-        char *name = new char[100];
-        cout << "Write Process name: " << endl;
-        cin >> name;
 
-        if (CreateProcess(name) == 1) {
-            cout << "Не создаётся процесс";
-        }
-        delete[]name;
-    } else if (selection == 2) {
-        char *name = new char[100];
-        cout << "Write Process name: " << endl;
-        cin >> name;
+    while(1){
+        char buf[255][255];
+        int newsock, size;
+        socklen_t clnlen;
 
-        if (CreateDaemon(name) == 1) {
-            cout << "Не создаётся демон";
-        }
+        newsock = accept(sock, (struct sockaddr*)&client, &clnlen); // появление нового клиента
+        printf("New client: %s\n",inet_ntoa(client.sin_addr));
 
-        delete[]name;
-    } else if (selection == 3) {
-        pid_t pid, signum;
-        cout << "Введите pid: ";
-        cin >> pid;
-        cout << "Введите сигнал для отправки: ";
-        cin >> signum;
-        if (SendSignal(pid, signum) == 1) {
-            cout << "Ошибка отправки сигнала" << endl;
-        }
+        while((size = recv(newsock, buf, sizeof(buf), 0)) != 0)
+        {
+            if (buf == NULL){ //Если флаги не введены
+                //Ловим сигналы Нибиру
+            } else if (!strcmp(buf[1], "CreateProcess")) { //Если процесс нужно запустить в фоновом режиме
+                CreateProcess(buf[2]);
+            } else if (!strcmp(buf[1],"CreateDaemon")){ //Если процесс нужно запустить НЕ в фоне
+                CreateDaemon(buf[2]);
+            } else if (!strcmp(buf[1],"CreateDaemon")) {
+                int signum = atoi(buf[3]);
+                int pid = atoi(buf[2]);
+                SendSignal(pid, signum);
+            }
+            send(newsock, buf, sizeof(buf), 0); // отправляем эхо
+        } // пока получаем от клиента
+
+        close(newsock);
     }
-    SendSignal(server_pid, SIGKILL);
+    close(sock);
+
     return 0;
 }
