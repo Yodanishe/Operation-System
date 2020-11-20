@@ -24,4 +24,6 @@ void sigHandler(int signum);
 int SendSignal(pid_t pid, int signum);
 int RecvSignal(int signum);
 
+int NetWorkClient(char *command);
+
 #endif //LITESH_LITESH_HPP
