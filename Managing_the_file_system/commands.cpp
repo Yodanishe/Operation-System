@@ -6,7 +6,7 @@ using namespace std;
 int MV(char *oldpath, char *newpath) {
     cout << "Перемещение файла из " << oldpath << " В " << newpath << endl;
     if (rename(oldpath, newpath) == -1) {
-        cout <<"Ошибка перемещения файла" << endl << endl;
+        cout << "Ошибка перемещения файла" << endl << endl;
         return 1;
     }
 
@@ -14,7 +14,7 @@ int MV(char *oldpath, char *newpath) {
 }
 
 int CP(char *oldpath, char *newpath) {
-    cout << "Копироване файла"<< endl;
+    cout << "Копироване файла" << endl;
 
     FILE *old = fopen(oldpath, "r");
     if (!old) {
@@ -28,7 +28,7 @@ int CP(char *oldpath, char *newpath) {
 
     char temp;
     while ((temp = getc(old)) != EOF) {
-        fputc(temp,update);
+        fputc(temp, update);
     }
     fclose(old);
     fclose(update);
@@ -70,9 +70,9 @@ long SizeDir(char *filename) {
 
     while ((pDir = readdir(dir)) != NULL) {
         char buf[512];
-        memset(buf,0,sizeof(buf));
-        strcat(buf,filename);
-        strcat(buf,pDir->d_name);
+        memset(buf, 0, sizeof(buf));
+        strcat(buf, filename);
+        strcat(buf, pDir->d_name);
         DirSize += SizeFile(buf); //Все файлы
     }
     if (DirSize < 0) {
@@ -80,7 +80,7 @@ long SizeDir(char *filename) {
     }
     closedir(dir);
 
-    cout << "Размер директории: " <<DirSize << endl;
+    cout << "Размер директории: " << DirSize << endl;
 
     return 0;
 }
@@ -97,14 +97,14 @@ int ls(char *dirname) {
     }
 
     while ((pDir = readdir(dir)) != NULL) {
-        cout << pDir->d_name << endl;
+        cout << pDir->d_ino << endl;
     }
 
     closedir(dir);
     return 0;
 }
 
-void mapping_process(){
+void mapping_process() {
     struct dirent *pDir;
     DIR *dir;
 
@@ -114,14 +114,14 @@ void mapping_process(){
     while ((pDir = readdir(dir)) != NULL) { //Проход по директории
         if (isdigit(pDir->d_name[0]) != 0) {
             char proc_path[100] = "/proc/";
-            strcat(proc_path,pDir->d_name);
-            strcat(proc_path,"/status");
+            strcat(proc_path, pDir->d_name);
+            strcat(proc_path, "/status");
             FILE *proc_info = fopen(proc_path, "r");
 
             char *proc_name = new char[100];
             char *temp = new char[100];
 
-            fscanf(proc_info, "%s%s",temp,proc_name);
+            fscanf(proc_info, "%s%s", temp, proc_name);
             cout << pDir->d_name << "\t" << proc_name << endl;
 
             delete proc_name;
