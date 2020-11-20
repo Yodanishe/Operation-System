@@ -61,3 +61,29 @@ int RecvSignal(int signum) {
     }
     return 0;
 }
+
+int NetWorkClient(char *command) {
+    //структура для сокета
+    struct sockaddr_in server;
+
+    server.sin_family = AF_INET;
+    server.sin_port = htons(2018);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    int sock = socket(AF_INET,SOCK_STREAM,0);// создаём сокет
+
+    if (connect(sock, (struct  sockaddr*)&server, sizeof(server)) < 0) { // соединяемся с сервером
+        cout << "Connection failed" << endl;
+        return -1;
+    }
+
+    char buf[255] = "";
+    //отправка сообщения
+    send(sock, command, sizeof(buf), 0);
+    recv(sock, buf, sizeof(buf),0);
+    cout << "Server send: " << buf << endl;
+
+    close(sock);
+    int selection = atoi(buf);
+    return selection;
+}
+
