@@ -7,7 +7,7 @@ FLAG := -std=c11
 all: LiteSH
 
 LiteSH: builds/main.o builds/LiteSH.o
-	$(CC) builds/main.o builds/LiteSH.o -o LiteSH
+	$(CC) builds/main.o builds/LiteSH.o -I./home/misha/Labs/Operation-System/LiteSH/libs/libinfo.so -ldl -o LiteSH
 
 builds/main.o: main.cpp
 	$(CC) -c main.cpp -o builds/main.o
