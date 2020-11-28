@@ -1,0 +1,17 @@
+[Unit]
+Description=LiteSH_daemon
+
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/home/misha/Labs/Operation-System/LiteSH/bin/Server
+ExecReload=/home/misha/Labs/Operation-System/LiteSH/bin/Server
+KillMode=control-group
+TimeoutStartSec=120
+OOMScoreAdjust=-1000
+
+
+[Install]
+WantedBy=multi-user.target

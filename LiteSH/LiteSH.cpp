@@ -76,7 +76,8 @@ int NetWorkClient(char *command) {
         return -1;
     }
 
-    char buf[255] = "";
+    char buf[255];
+    memset(buf,0,256);
     //отправка сообщения
     send(sock, command, sizeof(buf), 0);
     recv(sock, buf, sizeof(buf),0);
