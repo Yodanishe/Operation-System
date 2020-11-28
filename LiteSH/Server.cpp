@@ -23,7 +23,8 @@ int main() {
     listen(sock,5); // размер очереди
 
     while(work){
-        char buf[255] = "";
+        char buf[255];
+        memset(buf,0,256);
         int newsock, size;
         socklen_t clnlen;
 
